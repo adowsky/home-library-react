@@ -4,7 +4,8 @@ import {Link} from "react-router-dom";
 
 export default class Libraries extends React.Component {
     static contextTypes = {
-        restClient: PropTypes.object
+        restClient: PropTypes.object,
+        onAuthorizationFail: PropTypes.func
     };
 
     constructor(...props) {
@@ -18,7 +19,7 @@ export default class Libraries extends React.Component {
     componentDidMount() {
         this.context.restClient.getRequest(`/api/libraries`)
             .then(response => this.setState({ availableLibraries: response }))
-            .catch(() => this.props.history.push({ pathname: '/' }));
+           .catch(this.context.onAuthorizationFail);
     }
 
     render() {

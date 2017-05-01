@@ -10,11 +10,34 @@ import Libraries from "../library/Libraries";
 import UserLibrary from "../library/UserLibrary";
 import Book from "../library/Book";
 
+const routesForLogged = [
+    {
+        path: "/library",
+        component: Libraries
+    },
+    {
+        path: "/library/:username",
+        component: UserLibrary
+    },
+    {
+        path: "/book/:bookId",
+        component: Book
+    }
+];
+
+const routesForAnon = [
+    {
+        path: "/login",
+        component: Login
+    }
+];
+
 export default class Application extends React.Component {
     static childContextTypes = {
         restClient: PropTypes.object,
         onLogIn: PropTypes.func,
         onLogOut: PropTypes.func,
+        onAuthorizationFail: PropTypes.func,
         loggedIn: PropTypes.bool
     };
 
@@ -26,6 +49,18 @@ export default class Application extends React.Component {
         };
 
         this.logIn = this.logIn.bind(this);
+        this.onlyForLoggedIn = this.onlyForLoggedIn.bind(this);
+        this.flushAuth = this.flushAuth.bind(this);
+    }
+
+    componentDidMount() {
+        localForage.getItem("authorization")
+            .then(auth => {
+                if (auth) {
+                    this.restClient.setToken(JSON.parse(auth).accessToken);
+                    this.logIn();
+                }
+            })
     }
 
 
@@ -34,6 +69,7 @@ export default class Application extends React.Component {
             restClient: this.restClient,
             loggedIn: this.state.loggedId,
             onLogIn: this.logIn,
+            onAuthorizationFail: this.flushAuth,
             onLogOut: () => {
                 this.setState({ loggedId: false });
                 this.forceUpdate();
@@ -45,22 +81,25 @@ export default class Application extends React.Component {
         return this.setState({ loggedId: true });
     }
 
-
+    flushAuth() {
+        localForage.setItem("authorization", null);
+        this.restClient.setToken(null);
+        return this.setState({ loggedId: false });
+    }
+    
     render() {
-        const rootRender = () => (this.state.loggedId) ? <Redirect to="/library"/> : <Redirect to="/login"/>;
+        const rootRender = () => (this.state.loggedId) ? <Redirect from="/" to="/library"/> : <Redirect from="/" to="/login"/>;
+        const routes = (this.state.loggedId) ? routesForLogged : routesForAnon;
         return (
             <ApplicationView>
-                <Router >
+                <Router>
                     <Switch>
                         <Route exact path='/' render={ rootRender }/>
-                        <Route exact path='/login' component={ Login }/>
-                        <Route exact path='/library' component={ Libraries }/>
-                        <Route exact path='/library/:username' component={ UserLibrary }/>
-                        <Route exact path='/book/:bookId' component={ Book }/>
-                        <Route exact path='/*' component={ Libraries }/>
+                        { routes.map(route => <Route key={route.path} exact path={route.path}
+                                                     component={ route.component }/>) }
+                        <Route exact path='/*' render={ rootRender }/>
                     </Switch>
                 </Router>
-
             </ApplicationView>
         );
     }
