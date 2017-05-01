@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import BookHeaderView from "./BookHeaderView";
+
 export default class UserLibrary extends React.Component {
     static contextTypes = {
         restClient: PropTypes.object
@@ -22,6 +24,7 @@ export default class UserLibrary extends React.Component {
     render() {
         return (
           <div>
+              <BookHeaderView/>
               { this.state.books.map(book =>
               <div>
                   <p>{book.id}</p>

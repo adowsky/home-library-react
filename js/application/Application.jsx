@@ -8,6 +8,7 @@ import ApplicationView from "./ApplicationView";
 import Login from "../login/Login";
 import Libraries from "../library/Libraries";
 import UserLibrary from "../library/UserLibrary";
+import RegisteredView from "../static/RegisteredView";
 import Book from "../library/Book";
 
 const routesForLogged = [
@@ -29,6 +30,10 @@ const routesForAnon = [
     {
         path: "/login",
         component: Login
+    },
+    {
+        path: "/registered",
+        component: RegisteredView
     }
 ];
 
@@ -49,7 +54,6 @@ export default class Application extends React.Component {
         };
 
         this.logIn = this.logIn.bind(this);
-        this.onlyForLoggedIn = this.onlyForLoggedIn.bind(this);
         this.flushAuth = this.flushAuth.bind(this);
     }
 
@@ -86,7 +90,7 @@ export default class Application extends React.Component {
         this.restClient.setToken(null);
         return this.setState({ loggedId: false });
     }
-    
+
     render() {
         const rootRender = () => (this.state.loggedId) ? <Redirect from="/" to="/library"/> : <Redirect from="/" to="/login"/>;
         const routes = (this.state.loggedId) ? routesForLogged : routesForAnon;

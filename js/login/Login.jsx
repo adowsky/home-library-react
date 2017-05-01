@@ -4,6 +4,7 @@ import localForage from "localforage";
 
 
 import LoginView from "./LoginView";
+import Register from "./Register";
 
 export default class Login extends React.Component {
     static contextTypes = {
@@ -28,7 +29,7 @@ export default class Login extends React.Component {
     }
 
     componentDidUpdate() {
-        if(this.context.loggedIn) {
+        if (this.context.loggedIn) {
             this.props.history.push({ pathname: '/' });
         }
     }
@@ -53,7 +54,10 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <LoginView handle={ this.handle } form={ this.state.form } logIn={ this.logIn }/>
+            <div>
+                <LoginView handle={ this.handle } form={ this.state.form } logIn={ this.logIn }/>
+                <Register/>
+            </div>
         );
     }
 }
