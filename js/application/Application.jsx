@@ -15,6 +15,7 @@ export default class Application extends React.Component {
         restClient: PropTypes.object,
         onLogIn: PropTypes.func,
         onLogOut: PropTypes.func,
+        loggedIn: PropTypes.bool
     };
 
     constructor(...props) {
@@ -31,9 +32,10 @@ export default class Application extends React.Component {
     getChildContext() {
         return {
             restClient: this.restClient,
+            loggedIn: this.state.loggedId,
             onLogIn: this.logIn,
             onLogOut: () => {
-                this.setState({  loggedId: false });
+                this.setState({ loggedId: false });
                 this.forceUpdate();
             }
         };
@@ -48,7 +50,7 @@ export default class Application extends React.Component {
         const rootRender = () => (this.state.loggedId) ? <Redirect to="/library"/> : <Redirect to="/login"/>;
         return (
             <ApplicationView>
-                <Router>
+                <Router >
                     <Switch>
                         <Route exact path='/' render={ rootRender }/>
                         <Route exact path='/login' component={ Login }/>

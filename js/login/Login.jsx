@@ -8,7 +8,8 @@ import LoginView from "./LoginView";
 export default class Login extends React.Component {
     static contextTypes = {
         restClient: PropTypes.object,
-        onLogIn: PropTypes.func
+        onLogIn: PropTypes.func,
+        loggedIn: PropTypes.bool
     };
 
     constructor(...props) {
@@ -26,6 +27,12 @@ export default class Login extends React.Component {
         this.logIn = this.logIn.bind(this);
     }
 
+    componentDidUpdate() {
+        if(this.context.loggedIn) {
+            this.props.history.push({ pathname: '/' });
+        }
+    }
+
     handle(event) {
         const { name, value } = event.target;
 
@@ -41,8 +48,7 @@ export default class Login extends React.Component {
                 localForage.setItem("authorization", JSON.stringify(authorization));
                 this.context.restClient.setToken(authorization.accessToken);
             })
-            .then(this.context.onLogIn)
-            .then(() => this.props.history.push({ pathname: '/library' }));
+            .then(this.context.onLogIn);
     }
 
     render() {

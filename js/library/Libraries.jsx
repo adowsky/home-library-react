@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
 export default class Libraries extends React.Component {
     static contextTypes = {
@@ -16,13 +17,16 @@ export default class Libraries extends React.Component {
 
     componentDidMount() {
         this.context.restClient.getRequest(`/api/libraries`)
-            .then(response => this.setState({ availableLibraries: response }));
+            .then(response => this.setState({ availableLibraries: response }))
+            .catch(() => this.props.history.push({ pathname: '/' }));
     }
 
     render() {
         return (
-            <div></div>
+            <ul>
+                { this.state.availableLibraries
+                    .map(lib => <li key={lib}><Link to={`library/${lib}`}>{ lib }</Link></li>) }
+            </ul>
         );
     }
-
 }
