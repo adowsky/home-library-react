@@ -1,8 +1,21 @@
 export default class RestClient {
+    constructor() {
+        this._token = null;
+    }
+
+    setToken(token) {
+        this._token = token;
+    }
 
     getRequest(url = "") {
+        const headers = {};
+        if(this._token) {
+            headers["Authorization"] = this._token;
+        }
+
         return fetch(url, {
-            method: "GET"
+            method: "GET",
+            headers: headers
         }).then(response => {
             if (response.status >= 200 && response.status < 300) {
 
@@ -21,9 +34,18 @@ export default class RestClient {
     }
 
     postRequest(url = "", body = {}) {
+        const headers = {
+            ["Content-Type"]: "application/json"
+        };
+
+        if(this._token) {
+            headers["Authorization"] = this._token;
+        }
+
         return fetch(url, {
             method: "POST",
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            headers: headers
         }).then(response => {
             if (response.status >= 200 && response.status < 300) {
                 return response
@@ -33,8 +55,7 @@ export default class RestClient {
                 throw error;
             }
         })
-            .then(response => response.json())
-            .then(response => JSON.parse(response));
+            .then(response => response.json());
     }
 
     multipartPostRequest(url = "", body = {}, headers= {}) {

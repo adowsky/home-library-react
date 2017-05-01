@@ -51,7 +51,6 @@ gulp.task('prod', () => {
 let syncInstance = browsersync.create();
 
 gulp.task('build:js', () => {
-    gulp.run("build:html");
     return browserify(options.browserify)
         .transform(babelify)
         .bundle()
@@ -107,3 +106,13 @@ gulp.task("watch", () => {
     });
 
 });
+
+
+gulp.task("js-watch", ["build:js"], () => syncInstance.reload());
+gulp.task("html-watch", ["build:html"], () => syncInstance.reload);
+
+gulp.task('build', ['build:css', 'build:html', 'build:js', 'build:images']);
+
+gulp.task('build:prod', ['prod', 'build:css', 'build:html', 'build:js', 'build:images']);
+
+gulp.task('default', ['build:html', 'build:css', 'build:js', 'watch']);

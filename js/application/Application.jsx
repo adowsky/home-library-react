@@ -1,5 +1,7 @@
 import React from 'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import localForage from "localforage";
 
 import RestClient from "./RestClient";
 import ApplicationView from "./ApplicationView";
@@ -10,37 +12,51 @@ import Book from "../library/Book";
 
 export default class Application extends React.Component {
     static childContextTypes = {
-        restClient: React.PropTypes.any
+        restClient: PropTypes.object,
+        onLogIn: PropTypes.func,
+        onLogOut: PropTypes.func,
     };
 
-    constructor(props) {
-        super(props);
+    constructor(...props) {
+        super(...props);
         this.restClient = new RestClient();
-        console.log("Mounting app");
+        this.state = {
+            loggedId: false
+        };
+
+        this.logIn = this.logIn.bind(this);
     }
 
 
     getChildContext() {
         return {
-            restClient: this.restClient
+            restClient: this.restClient,
+            onLogIn: this.logIn,
+            onLogOut: () => {
+                this.setState({  loggedId: false });
+                this.forceUpdate();
+            }
         };
+    }
+
+    logIn() {
+        return this.setState({ loggedId: true });
     }
 
 
     render() {
+        const rootRender = () => (this.state.loggedId) ? <Redirect to="/library"/> : <Redirect to="/login"/>;
         return (
             <ApplicationView>
-
                 <Router>
-                    <div className="root">
-                        <Switch>
-                            <Route exact path='/login' component={ Login }/>
-                            <Route exact path='/library/' component={ Libraries }/>
-                            <Route exact path='/library/:username' component={ UserLibrary }/>
-                            <Route exact path='/book/:bookId' component={ Book }/>
-                            <Route exact path='/*' component={ Libraries }/>
-                        </Switch>
-                    </div>
+                    <Switch>
+                        <Route exact path='/' render={ rootRender }/>
+                        <Route exact path='/login' component={ Login }/>
+                        <Route exact path='/library' component={ Libraries }/>
+                        <Route exact path='/library/:username' component={ UserLibrary }/>
+                        <Route exact path='/book/:bookId' component={ Book }/>
+                        <Route exact path='/*' component={ Libraries }/>
+                    </Switch>
                 </Router>
 
             </ApplicationView>
