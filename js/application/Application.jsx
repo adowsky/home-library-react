@@ -4,7 +4,9 @@ import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import localForage from "localforage";
 
 import RestClient from "./RestClient";
+import MenuView from "./MenuView";
 import ApplicationView from "./ApplicationView";
+import LoadingView from "./LoadingView";
 import Login from "../login/Login";
 import Libraries from "../library/Libraries";
 import UserLibrary from "../library/UserLibrary";
@@ -53,7 +55,9 @@ export default class Application extends React.Component {
         this.restClient = new RestClient();
         this.state = {
             username: null,
-            readingBooks: []
+            readingBooks: [],
+            loaded: false
+
         };
 
         this.logIn = this.logIn.bind(this);
@@ -68,10 +72,12 @@ export default class Application extends React.Component {
                     const authorization = JSON.parse(auth);
                     this.restClient.setToken(authorization.accessToken);
                     console.debug(`Found access token: ${auth}`);
-                    this.logIn(authorization.username);
-
+                    return authorization.username;
                 }
             })
+            .then(this.logIn)
+            .then(() => this.setState({ loaded: true }))
+            .catch(() => this.setState({ loaded: true }))
     }
 
 
@@ -92,11 +98,11 @@ export default class Application extends React.Component {
 
     logIn(username) {
         this.setState({ username });
-        this.afterLogin();
+        return this.afterLogin();
     }
 
     afterLogin() {
-        this.restClient.getRequest(`/api/readings`)
+        return this.restClient.getRequest(`/api/readings`)
             .then(readingBooks => this.setState({ readingBooks }));
     }
 
@@ -116,16 +122,22 @@ export default class Application extends React.Component {
             <Redirect from="/" to="/login"/>;
         const routes = (this.state.username) ? routesForLogged : routesForAnon;
         return (
+            <Router>
             <ApplicationView>
-                <Router>
-                    <Switch>
-                        <Route exact path='/' render={ rootRender }/>
-                        { routes.map(route => <Route key={route.path} exact path={route.path}
-                                                     component={ route.component }/>) }
-                        <Route exact path='/*' render={ rootRender }/>
-                    </Switch>
-                </Router>
+                { (this.state.loaded && this.state.username) ? <MenuView/> : null }
+                { (this.state.loaded) ?
+
+                        <Switch>
+                            <Route exact path='/' render={ rootRender }/>
+                            { routes.map(route => <Route key={route.path} exact path={route.path}
+                                                         component={ route.component }/>) }
+                            <Route exact path='/*' render={ rootRender }/>
+                        </Switch>
+                     :
+                    <LoadingView/>
+                }
             </ApplicationView>
+            </Router>
         );
     }
 }

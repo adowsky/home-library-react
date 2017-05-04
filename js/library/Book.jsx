@@ -15,28 +15,46 @@ export default class Book extends React.Component {
         this.props.borrow(this.props.book.id, mode, true);
     }
 
+
     render() {
         const { id, author, title, borrowedBy } = this.props.book;
-        const { markReading, showBorrower, showBorrow, borrowToAnon, reading, handle  } = this.props;
+        const { showBorrower, showBorrow, borrowToAnon, reading, handle } = this.props;
+        const markReading = (event) => {
+            event.preventDefault();
+            this.props.markReading(!reading, id);
+        };
         return (
-            <div>
-                { (this.props.add) ?
-                    <div>
-                        <input name="author" placeholder="author" value={ author || "" } onChange={ handle }/>
-                        <input name="title" placeholder="title" value={ title || "" } onChange={ handle }/>
-                        <button onClick={ this.props.add }>Add</button>
-                        <button onClick={ this.props.reject }>Reject</button>
-                    </div> : <div>
-                        <span>{ author }</span>
-                        <span>{ title }</span>
-                        { (showBorrower && borrowedBy) ? <span>Borrowed by: { borrowedBy }</span> : null }
-                        { (showBorrow) ? <button onClick={ this.onBorrow.bind(this) }>{ (borrowedBy) ? 'Return' : 'Borrow' }</button> : null }
-                        { (showBorrow && borrowToAnon && "" === borrowedBy) ? <button onClick={ this.onAnonBorrow.bind(this) }>Borrow outside system</button> : null }
-                        { reading ?
-                            <button onClick={ () => markReading(false, id) }>Unmark reading</button>:
-                            <button onClick={ () => markReading(true, id) }>Mark as reading</button> }
-                    </div> }
-            </div>
+            <tr>
+                <th>
+                    { (this.props.add) ? <input name="author" placeholder="author" value={ author || "" }
+                                                onChange={ handle }/> : author }
+                </th>
+                <th>
+                    { (this.props.add) ?
+                        <input name="title" placeholder="title" value={ title || "" } onChange={ handle }/> : title }
+                </th>
+                <th className="v-padded">
+                    {(this.props.add) ?
+                        <ul>
+                            <li><a onClick={ this.props.add } href="#">Add</a></li>
+                            <li><a onClick={ this.props.reject } href="#">Reject</a></li>
+                        </ul>
+                        : <ul>
+                            { (showBorrower && borrowedBy) ? <li>Borrowed by: { borrowedBy }</li> : null }
+                            { (showBorrow) ?
+                                <li><a onClick={ this.onBorrow.bind(this) } href="#">{ (borrowedBy) ? 'Return' : 'Borrow' }</a>
+                                </li> : null }
+                            { (showBorrow && borrowToAnon && "" === borrowedBy) ?
+                                <li><a onClick={ this.onAnonBorrow.bind(this) } href="#">Borrow outside system</a></li> : null }
+                            <li>
+                                { reading ?
+                                    <a onClick={ markReading.bind(this) } href="#">Unmark reading</a> :
+                                    <a onClick={ markReading.bind(this) } href="#">Mark as reading</a> }
+                            </li>
+
+                        </ul> }
+                </th>
+            </tr>
         );
     }
 }

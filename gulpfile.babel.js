@@ -23,7 +23,8 @@ const PATHS = {
     entryPoint: `${SOURCE_PATH}js/start.jsx`,
     jsOut: `${basePath}js/all.js`,
     cssInput: [
-        `${SOURCE_PATH}css/reset.css`
+        `${SOURCE_PATH}css/reset.css`,
+        `${SOURCE_PATH}css/style.css`
     ],
     cssOutput: `${basePath}css`,
     htmlInput: `${SOURCE_PATH}*.html`,

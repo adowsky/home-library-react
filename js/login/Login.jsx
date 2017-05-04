@@ -45,7 +45,7 @@ export default class Login extends React.Component {
         event.preventDefault();
         this.context.restClient.setToken(null);
         const { login, password } = this.state.form;
-        this.context.restClient.postRequest(`/api/users/${login}`, { passwordHash: password })
+        this.context.restClient.postRequest(`/api/users/${login}/authorize`, { passwordHash: password })
             .then(authorization => {
                 authorization.username = login;
                 localForage.setItem("authorization", JSON.stringify(authorization));
@@ -57,7 +57,7 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="login">
                 <LoginView handle={ this.handle } form={ this.state.form } logIn={ this.logIn }/>
                 <Register/>
             </div>

@@ -8,7 +8,7 @@ export default class ApplicationView extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="app">
                 <HeaderView />
 
                 { this.props.children }

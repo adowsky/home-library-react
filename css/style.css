@@ -1,0 +1,50 @@
+html {  min-height: 100%; }
+body { min-height: 100%; }
+button, a { transition: all 0.1s ease-out; color: #3b2b97 }
+a:visited { color: #3b2b97; }
+a:hover { color:#4734bc; }
+input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
+
+
+.errors { border-radius: 5px; border: 1px solid #cc3643; color: #cc3643; padding: 10px; }
+
+.emphasised { font-size:20px; font-family:'Georgia', sans-serif; }
+.title { font-size:16px; font-family:'Georgia', sans-serif; }
+.v-spaced { margin: 10px auto; }
+.v-padded { padding: 10px auto; }
+
+
+.display-table > thead { font-weight:700; color: #fff; background: #4383af; }
+    .display-table > tbody tr:hover { background:#f4f4f4; }
+    .display-table > tbody tr { border: 1px solid black; }
+
+    .app > header { min-height:50px; text-align:center; background: #3b2b97; }
+        .app > header > h2 { font-size:20px; color:#fff; }
+
+    nav{ text-align:center; background: #3b2b97; padding: 5px; }
+        nav li { display:inline-block; }
+            nav a { padding:5px; color: #fff; text-decoration:none; }
+            nav a:hover { color: #ccc; }
+
+    .login {}
+    .login > div { text-align:center; padding: 20px; }
+            .login > div > input { display: block; margin: 3px auto; padding: 5px; border-radius:3px;     border: 1px solid #CBCBCB }
+            .login > div > h2 { margin: 6px auto; }
+            .login > div > button { border-radius: 4px; padding: 4px 6px; background: #5570a4;border: 1px solid #383c98; color:#fff }
+            .login > div > button:hover { background: #383c98; }
+
+    .libraries, .user-library { text-align: center; }
+    .button-link { padding: 10px; border: 1px solid #b0b0b0; border-radius: 6px; display: block; max-width: 60%; margin: 5px auto; color:#000; text-decoration:none; transition: all 0.2s ease-out; }
+    .button-link:hover { background:#dedede; }
+
+    .user-library > section { padding: 25px 0; }
+    .user-library table { width:100%; table-layout: fixed; }
+        .user-library table th { padding: 10px; vertical-align: middle; }
+                .user-library table > tbody tr input { width: 85%; height:100%;  }
+        .user-library table li { display:block; margin: 0 auto; padding: 5px; }
+
+
+
+    .user-library > .add {  }
+    .user-library > .add th { padding:0 5px; }
+    .user-library > .add tr { border: none;  }
