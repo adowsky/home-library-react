@@ -29,7 +29,7 @@ export default class Login extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.context.loggedIn) {
+        if (this.context.username) {
             this.props.history.push({ pathname: '/' });
         }
     }
@@ -43,11 +43,14 @@ export default class Login extends React.Component {
 
     logIn(event) {
         event.preventDefault();
+        this.context.restClient.setToken(null);
         const { login, password } = this.state.form;
         this.context.restClient.postRequest(`/api/users/${login}`, { passwordHash: password })
             .then(authorization => {
+                authorization.username = login;
                 localForage.setItem("authorization", JSON.stringify(authorization));
                 this.context.restClient.setToken(authorization.accessToken);
+                return login;
             })
             .then(this.context.onLogIn);
     }

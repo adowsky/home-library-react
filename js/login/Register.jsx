@@ -31,7 +31,7 @@ export default class Register extends React.Component {
     }
 
     componentDidUpdate() {
-        if(this.context.loggedIn) {
+        if(this.context.username) {
             this.props.history.push({ pathname: '/' });
         }
     }

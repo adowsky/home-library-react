@@ -43,26 +43,33 @@ export default class Application extends React.Component {
         onLogIn: PropTypes.func,
         onLogOut: PropTypes.func,
         onAuthorizationFail: PropTypes.func,
-        loggedIn: PropTypes.bool
+        username: PropTypes.string,
+        readingBooks: PropTypes.array,
+        refreshReadings: PropTypes.func
     };
 
     constructor(...props) {
         super(...props);
         this.restClient = new RestClient();
         this.state = {
-            loggedId: false
+            username: null,
+            readingBooks: []
         };
 
         this.logIn = this.logIn.bind(this);
         this.flushAuth = this.flushAuth.bind(this);
+        this.refreshReadings = this.refreshReadings.bind(this);
     }
 
     componentDidMount() {
         localForage.getItem("authorization")
             .then(auth => {
                 if (auth) {
-                    this.restClient.setToken(JSON.parse(auth).accessToken);
-                    this.logIn();
+                    const authorization = JSON.parse(auth);
+                    this.restClient.setToken(authorization.accessToken);
+                    console.debug(`Found access token: ${auth}`);
+                    this.logIn(authorization.username);
+
                 }
             })
     }
@@ -71,7 +78,9 @@ export default class Application extends React.Component {
     getChildContext() {
         return {
             restClient: this.restClient,
-            loggedIn: this.state.loggedId,
+            username: this.state.username,
+            readingBooks: this.state.readingBooks,
+            refreshReadings: this.refreshReadings,
             onLogIn: this.logIn,
             onAuthorizationFail: this.flushAuth,
             onLogOut: () => {
@@ -81,19 +90,31 @@ export default class Application extends React.Component {
         };
     }
 
-    logIn() {
-        return this.setState({ loggedId: true });
+    logIn(username) {
+        this.setState({ username });
+        this.afterLogin();
+    }
+
+    afterLogin() {
+        this.restClient.getRequest(`/api/readings`)
+            .then(readingBooks => this.setState({ readingBooks }));
+    }
+
+    refreshReadings() {
+        this.restClient.getRequest(`/api/readings`)
+            .then(readingBooks => this.setState({ readingBooks }));
     }
 
     flushAuth() {
         localForage.setItem("authorization", null);
         this.restClient.setToken(null);
-        return this.setState({ loggedId: false });
+        return this.setState({ username: null });
     }
 
     render() {
-        const rootRender = () => (this.state.loggedId) ? <Redirect from="/" to="/library"/> : <Redirect from="/" to="/login"/>;
-        const routes = (this.state.loggedId) ? routesForLogged : routesForAnon;
+        const rootRender = () => (this.state.username) ? <Redirect from="/" to="/library"/> :
+            <Redirect from="/" to="/login"/>;
+        const routes = (this.state.username) ? routesForLogged : routesForAnon;
         return (
             <ApplicationView>
                 <Router>
