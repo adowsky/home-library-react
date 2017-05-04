@@ -1,7 +1,6 @@
 html {  min-height: 100%; }
 body { min-height: 100%; }
 button, a { transition: all 0.1s ease-out; color: #3b2b97 }
-a:visited { color: #3b2b97; }
 a:hover { color:#4734bc; }
 input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
 

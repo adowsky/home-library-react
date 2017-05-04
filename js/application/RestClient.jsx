@@ -7,6 +7,33 @@ export default class RestClient {
         this._token = token;
     }
 
+    deleteRequest(url = "") {
+        const headers = {};
+        if(this._token) {
+            headers["Authorization"] = this._token;
+        }
+
+        return fetch(url, {
+            method: "DELETE",
+            headers: headers
+        }).then(response => {
+            if (response.status >= 200 && response.status < 300) {
+
+                return response;
+            } else {
+                let error = new Error(response.statusText);
+                error.response = response;
+                throw error;
+            }
+        })
+            .then(response =>  response.json())
+            .then(response => {
+                if(response)
+                    console.debug(`RESPONSE: ${JSON.stringify(response)}`);
+                return response;
+            })
+    }
+
     getRequest(url = "") {
         const headers = {};
         if(this._token) {
@@ -34,10 +61,10 @@ export default class RestClient {
             })
     }
 
-    postRequest(url = "", body = {}) {
-        const headers = {
+    postRequest(url = "", body = {}, additionalHeaders = {}) {
+        const headers = Object.assign({}, additionalHeaders, {
             ["Content-Type"]: "application/json"
-        };
+        });
 
         if(this._token) {
             headers["Authorization"] = this._token;

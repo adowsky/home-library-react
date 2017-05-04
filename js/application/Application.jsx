@@ -61,6 +61,7 @@ export default class Application extends React.Component {
         };
 
         this.logIn = this.logIn.bind(this);
+        this.logout = this.logout.bind(this);
         this.flushAuth = this.flushAuth.bind(this);
         this.refreshReadings = this.refreshReadings.bind(this);
     }
@@ -89,16 +90,25 @@ export default class Application extends React.Component {
             refreshReadings: this.refreshReadings,
             onLogIn: this.logIn,
             onAuthorizationFail: this.flushAuth,
-            onLogOut: () => {
-                this.setState({ loggedId: false });
-                this.forceUpdate();
-            }
+            onLogOut: this.logout
         };
     }
 
     logIn(username) {
         this.setState({ username });
         return this.afterLogin();
+    }
+
+    logout() {
+        const onLogout = () => {
+            localForage.setItem("authorization", null);
+            this.restClient.setToken(null);
+            this.flushAuth();
+        };
+
+        this.restClient.deleteRequest(`/api/authorize`, {})
+            .then(onLogout)
+            .catch(onLogout)
     }
 
     afterLogin() {
@@ -124,11 +134,15 @@ export default class Application extends React.Component {
         return (
             <Router>
             <ApplicationView>
-                { (this.state.loaded && this.state.username) ? <MenuView/> : null }
+                { (this.state.loaded && this.state.username) ? <MenuView /> : null }
                 { (this.state.loaded) ?
 
                         <Switch>
                             <Route exact path='/' render={ rootRender }/>
+                            <Route exact path='/logout' render={ () => {
+                                this.logout();
+                                return <Redirect from="/logout" to="/login"/>
+                            } }/>
                             { routes.map(route => <Route key={route.path} exact path={route.path}
                                                          component={ route.component }/>) }
                             <Route exact path='/*' render={ rootRender }/>
