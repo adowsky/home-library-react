@@ -166,7 +166,7 @@ export default class UserLibrary extends React.Component {
                                   showBorrower={ showBorrow && !book.borrowedBy }
                                   borrowToAnon={ true }
                                   reading={ this.context.readingBooks.includes(book.id) }
-                                  borrow={this.borrow}/>) }
+                                  borrow={ this.borrow }/>) }
                         </tbody>
                     </table>
                 </section>
@@ -186,6 +186,7 @@ export default class UserLibrary extends React.Component {
                             <Book key={ index } book={ book.book }
                                   markReading={ this.readingMarking.bind(this) }
                                   showBorrow={ !showBorrow }
+                                  borrow={ this.borrow }
                                   showBorrower={ false }
                                   reading={ this.context.readingBooks.includes(book.book.id) }/>) }
                         </tbody>

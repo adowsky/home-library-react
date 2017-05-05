@@ -11,7 +11,7 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
 .title { font-size:16px; font-family:'Georgia', sans-serif; }
 .v-spaced { margin: 10px auto; }
 .v-padded { padding: 10px auto; }
-
+.header { background: #3b2b97; }
 
 .display-table > thead { font-weight:700; color: #fff; background: #4383af; }
     .display-table > tbody tr:hover { background:#f4f4f4; }
@@ -27,9 +27,9 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
 
     .login {}
     .login > div { text-align:center; padding: 20px; }
-            .login > div > input { display: block; margin: 3px auto; padding: 5px; border-radius:3px;     border: 1px solid #CBCBCB }
+            .login > div > input { display: block; margin: 3px auto; padding: 5px; border-radius:3px; border: 1px solid #CBCBCB; }
             .login > div > h2 { margin: 6px auto; }
-            .login > div > button { border-radius: 4px; padding: 4px 6px; background: #5570a4;border: 1px solid #383c98; color:#fff }
+            .login > div > button { border-radius: 4px; padding: 4px 6px; background: #5570a4;border: 1px solid #383c98; color:#fff; }
             .login > div > button:hover { background: #383c98; }
 
     .libraries, .user-library { text-align: center; }
@@ -42,8 +42,14 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
                 .user-library table > tbody tr input { width: 85%; height:100%;  }
         .user-library table li { display:block; margin: 0 auto; padding: 5px; }
 
-
-
     .user-library > .add {  }
     .user-library > .add th { padding:0 5px; }
     .user-library > .add tr { border: none;  }
+
+
+    .permission { padding: 5px; }
+    .permission a { color:#fff; padding: 10px; }
+    .permission a:hover { color:#ccc; }
+    .permission { text-align:right; }
+    .permission input[type=submit] { color:#fff; background: none; border: none; text-decoration: underline; cursor: pointer; }
+    .permission input[type=submit]:hover { color:#ccc; }
