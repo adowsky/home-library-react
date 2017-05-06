@@ -60,3 +60,6 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
     .registered h2 { font-weight:700; font-size: 25px; font-family:'Georgia', sans-serif; }
     .registered >header { margin: 20px auto; }
     .registered > p { font-family:'Georgia', sans-serif; }
+
+    .stats { margin: 15px auto; font-size: 16px; display:inline-block; border: 1px solid #ccc; border-radius: 5px; padding: 20px;}
+    .stats h2 { display: inline-block; font-weight: 700; }

@@ -137,7 +137,7 @@ export default class UserLibrary extends React.Component {
 
         this.context.restClient.postRequestNoBody(`/api/books/${bookId}/reading`, request)
             .then(() => {
-                const readingBooks = this.context.readingBooks.slice(0);
+                const readingBooks = this.context.readingBooksIds.slice(0);
                 readingBooks.push(bookId);
                 console.debug(bookId);
                 this.context.refreshReadings();

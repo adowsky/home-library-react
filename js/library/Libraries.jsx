@@ -27,6 +27,8 @@ export default class Libraries extends React.Component {
     render() {
         return (
             <div className="libraries">
+                <Statistics />
+
                 <header>
                     <h2 className="emphasised v-spaced">Available libraries</h2>
                 </header>
@@ -34,8 +36,6 @@ export default class Libraries extends React.Component {
                     { this.state.availableLibraries
                         .map(lib => <li key={lib}><Link className="button-link" to={`library/${lib}`}>{ lib }</Link></li>) }
                 </ul>
-
-                <Statistics />
             </div>
         );
     }
