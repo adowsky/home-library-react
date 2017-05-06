@@ -8,6 +8,8 @@ import MenuView from "./MenuView";
 import ApplicationView from "./ApplicationView";
 import LoadingView from "./LoadingView";
 import Login from "../login/Login";
+import Confirm from "../login/Confirm";
+import Register from "../login/Register";
 import Libraries from "../library/Libraries";
 import UserLibrary from "../library/UserLibrary";
 import RegisteredView from "../static/RegisteredView";
@@ -34,8 +36,16 @@ const routesForAnon = [
         component: Login
     },
     {
+        path: "/register",
+        component: Register
+    },
+    {
         path: "/registered",
         component: RegisteredView
+    },
+    {
+        path: "/confirm",
+        component: Confirm
     }
 ];
 
@@ -58,6 +68,12 @@ export default class Application extends React.Component {
             readingBooks: [],
             loaded: false
 
+        };
+
+        this.onLogout = () => {
+            localForage.setItem("authorization", null);
+            this.restClient.setToken(null);
+            this.flushAuth();
         };
 
         this.logIn = this.logIn.bind(this);
@@ -100,20 +116,17 @@ export default class Application extends React.Component {
     }
 
     logout() {
-        const onLogout = () => {
-            localForage.setItem("authorization", null);
-            this.restClient.setToken(null);
-            this.flushAuth();
-        };
+
 
         this.restClient.deleteRequest(`/api/authorize`, {})
-            .then(onLogout)
-            .catch(onLogout)
+            .then(this.onLogout)
+            .catch(this.onLogout)
     }
 
     afterLogin() {
         return this.restClient.getRequest(`/api/readings`)
-            .then(readingBooks => this.setState({ readingBooks }));
+            .then(readingBooks => this.setState({ readingBooks }))
+            .catch(this.onLogout);
     }
 
     refreshReadings() {

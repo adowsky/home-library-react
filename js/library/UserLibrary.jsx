@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import BookHeaderView from "./BookHeaderView";
 import Book from "./Book";
+import Search from "./Search";
 
 export default class UserLibrary extends React.Component {
     static contextTypes = {
@@ -29,6 +30,7 @@ export default class UserLibrary extends React.Component {
         this.rejectAdd = this.rejectAdd.bind(this);
         this.borrow = this.borrow.bind(this);
         this.validateBook = this.validateBook.bind(this);
+        this.onSelectSearchResult = this.onSelectSearchResult.bind(this);
     }
 
     componentDidMount() {
@@ -52,7 +54,7 @@ export default class UserLibrary extends React.Component {
 
     onAdd(event) {
         event.preventDefault();
-        if(!this.validateBook(this.state.addingBook)) {
+        if (!this.validateBook(this.state.addingBook)) {
             return;
         }
         const { username } = this.props.match.params;
@@ -80,10 +82,10 @@ export default class UserLibrary extends React.Component {
         this.setState({ addingBook });
     }
 
-    validateBook(book, fields=["title", "author"]) {
+    validateBook(book, fields = ["title", "author"]) {
         const errors = Object.assign({}, this.state.errors);
         fields.forEach(field => {
-            if(book[field].length < 2)
+            if (book[field].length < 2)
                 errors[field] = `${field} is too short`;
             else
                 delete errors[field];
@@ -105,9 +107,17 @@ export default class UserLibrary extends React.Component {
             outside: outside
         })
             .then(() => {
-                const book = this.state.library.ownedBooks.filter(book => book.id === bookId);
-                book.borrowedBy = this.context.username;
-                this.forceUpdate();
+                if (mode === "BORROW") {
+                    const book = this.state.library.ownedBooks.filter(book => book.id === bookId);
+                    book.borrowedBy = this.context.username;
+                    this.forceUpdate();
+                } else {
+                    let borrowedBooks = this.state.library.borrowedBooks;
+                    const book = this.state.library.borrowedBooks.filter(book => book.id === bookId);
+                    borrowedBooks = borrowedBooks.splice(borrowedBooks.indexOf(book), 1);
+                    const library = Object.assign({}, this.state.library, { borrowedBooks });
+                    this.setState({ library });
+                }
             });
     }
 
@@ -124,6 +134,11 @@ export default class UserLibrary extends React.Component {
                 console.debug(bookId);
                 this.context.refreshReadings();
             });
+    }
+
+    onSelectSearchResult(book) {
+        const addingBook = Object.assign({}, this.state.addingBook, book);
+        this.setState({ addingBook });
     }
 
     render() {
@@ -147,6 +162,8 @@ export default class UserLibrary extends React.Component {
                         </div>
                         : null }
                 </section>
+                { (this.state.addingBook) ? <Search onSelect={this.onSelectSearchResult}/> : null }
+
                 <section>
                     <h2 className="title v-spaced">Books owned by library owner</h2>
 

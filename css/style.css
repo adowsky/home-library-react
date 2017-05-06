@@ -4,6 +4,8 @@ button, a { transition: all 0.1s ease-out; color: #3b2b97 }
 a:hover { color:#4734bc; }
 input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
 
+    header a { color: #fff; text-decoration:none; }
+    header a:hover { color: #ccc; }
 
 .errors { border-radius: 5px; border: 1px solid #cc3643; color: #cc3643; padding: 10px; }
 
@@ -53,3 +55,8 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
     .permission { text-align:right; }
     .permission input[type=submit] { color:#fff; background: none; border: none; text-decoration: underline; cursor: pointer; }
     .permission input[type=submit]:hover { color:#ccc; }
+
+    .registered { text-align:center; }
+    .registered h2 { font-weight:700; font-size: 25px; font-family:'Georgia', sans-serif; }
+    .registered >header { margin: 20px auto; }
+    .registered > p { font-family:'Georgia', sans-serif; }

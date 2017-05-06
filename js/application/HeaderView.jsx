@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 export default class HeaderView extends React.Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export default class HeaderView extends React.Component {
     render() {
         return (
             <header>
-                <h2>Home Library</h2>
+                <h2><Link to="/">Home Library</Link></h2>
             </header>
 
         );

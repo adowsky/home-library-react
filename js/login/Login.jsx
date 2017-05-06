@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import localForage from "localforage";
 
+import { sha256 } from "js-sha256";
 
 import LoginView from "./LoginView";
 import Register from "./Register";
@@ -20,8 +21,8 @@ export default class Login extends React.Component {
             form: {
                 login: "",
                 password: ""
-            }
-
+            },
+            queryParams: ""
         };
 
         this.handle = this.handle.bind(this);
@@ -44,8 +45,10 @@ export default class Login extends React.Component {
     login(event) {
         event.preventDefault();
         this.context.restClient.setToken(null);
-        const { login, password } = this.state.form;
-        this.context.restClient.postRequest(`/api/authorize`, { passwordHash: password }, { username: login })
+        const { login } = this.state.form;
+        const passwordHash = sha256(this.state.form.password);
+
+        this.context.restClient.postRequest(`/api/authorize`, { passwordHash }, { username: login })
             .then(authorization => {
                 authorization.username = login;
                 localForage.setItem("authorization", JSON.stringify(authorization));
@@ -59,7 +62,7 @@ export default class Login extends React.Component {
         return (
             <div className="login">
                 <LoginView handle={ this.handle } form={ this.state.form } login={ this.login }/>
-                <Register/>
+                <Register location={ this.props.location } history={ this.props.history } />
             </div>
         );
     }

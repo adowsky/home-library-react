@@ -3,7 +3,7 @@ import React from "react";
 export default class RegisteredView extends React.Component {
     render() {
         return (
-            <section>
+            <section className="registered">
             <header>
                <h2>Registration finished successfully</h2>
             </header>

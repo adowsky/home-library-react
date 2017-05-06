@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import localForage from "localforage";
+import { sha256 } from "js-sha256";
+
+import { parseQueryParams } from "../UrlUtils";
 
 
 import RegisterView from "./RegisterView";
@@ -37,7 +39,15 @@ export default class Register extends React.Component {
     }
 
     register() {
-        this.context.restClient.postRequestNoBody(`/api/users`, this.state.form)
+        const request = Object.assign({}, this.state.form);
+        request.passwordHash = sha256(this.state.form.passwordHash);
+        if(this.props.location.search) {
+            const queryParams = parseQueryParams(this.props.location.search);
+            if(queryParams.invitation)
+                request.registrationHash = queryParams.invitation;
+        }
+
+        this.context.restClient.postRequestNoBody(`/api/users`, request)
             .then(() => this.props.history.push({ pathname: '/registered' }));
     }
 
