@@ -18,7 +18,7 @@ export default class Book extends React.Component {
 
     render() {
         const { id, author, title, borrowedBy } = this.props.book;
-        const { showBorrower, showBorrow, borrowToAnon, reading, handle } = this.props;
+        const { showBorrower, showBorrow, borrowToAnon, reading, handle, owner } = this.props;
         const markReading = (event) => {
             event.preventDefault();
             this.props.markReading(!reading, id);

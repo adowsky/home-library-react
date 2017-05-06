@@ -57,6 +57,7 @@ export default class Application extends React.Component {
         onAuthorizationFail: PropTypes.func,
         username: PropTypes.string,
         readingBooks: PropTypes.array,
+        readingBooksIds: PropTypes.array,
         refreshReadings: PropTypes.func
     };
 
@@ -103,6 +104,7 @@ export default class Application extends React.Component {
             restClient: this.restClient,
             username: this.state.username,
             readingBooks: this.state.readingBooks,
+            readingBooksIds: this.state.readingBooks.map(book => book.id),
             refreshReadings: this.refreshReadings,
             onLogIn: this.logIn,
             onAuthorizationFail: this.flushAuth,

@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
+import Statistics from "./Statistics";
+
 export default class Libraries extends React.Component {
     static contextTypes = {
         restClient: PropTypes.object,
@@ -32,6 +34,8 @@ export default class Libraries extends React.Component {
                     { this.state.availableLibraries
                         .map(lib => <li key={lib}><Link className="button-link" to={`library/${lib}`}>{ lib }</Link></li>) }
                 </ul>
+
+                <Statistics />
             </div>
         );
     }

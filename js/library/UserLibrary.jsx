@@ -10,7 +10,7 @@ export default class UserLibrary extends React.Component {
         restClient: PropTypes.object,
         refreshReadings: PropTypes.func,
         username: PropTypes.string,
-        readingBooks: PropTypes.array
+        readingBooksIds: PropTypes.array
     };
 
     constructor(...props) {
@@ -107,16 +107,24 @@ export default class UserLibrary extends React.Component {
             outside: outside
         })
             .then(() => {
+                let book = this.state.library.ownedBooks.filter(book => book.id === bookId)[0];
+                let libPart = "ownedBooks";
+                if(!book) {
+                    book = this.state.library.borrowedBooks.filter(book => book.book.id === bookId)[0];
+                    libPart = "borrowedBooks";
+                }
+
                 if (mode === "BORROW") {
-                    const book = this.state.library.ownedBooks.filter(book => book.id === bookId);
                     book.borrowedBy = this.context.username;
                     this.forceUpdate();
                 } else {
-                    let borrowedBooks = this.state.library.borrowedBooks;
-                    const book = this.state.library.borrowedBooks.filter(book => book.id === bookId);
-                    borrowedBooks = borrowedBooks.splice(borrowedBooks.indexOf(book), 1);
-                    const library = Object.assign({}, this.state.library, { borrowedBooks });
-                    this.setState({ library });
+                    book.borrowedBy = null;
+                    if(libPart === "ownedBooks"){
+                        this.forceUpdate();
+                    } else {
+                        this.state.library[libPart].splice(this.state.library[libPart].indexOf(book), 1);
+                        this.forceUpdate();
+                    }
                 }
             });
     }
@@ -142,7 +150,9 @@ export default class UserLibrary extends React.Component {
     }
 
     render() {
-        const showBorrow = this.context.username !== this.props.match.params.username;
+        const owner = this.props.match.params.username;
+        const username = this.context.username ;
+        const showBorrow = (username !== owner);
         const errors = Object.keys(this.state.errors).map(key => this.state.errors[key]);
         return (
             <div className="user-library">
@@ -177,12 +187,12 @@ export default class UserLibrary extends React.Component {
                         </thead>
                         <tbody>
                         { this.state.library.ownedBooks.map((book, index) =>
-                            <Book key={ index } book={ book }
+                            <Book key={ index } book={ book } owner={ owner }
                                   markReading={ this.readingMarking.bind(this) }
-                                  showBorrow={showBorrow }
-                                  showBorrower={ showBorrow && !book.borrowedBy }
+                                  showBorrow={ showBorrow }
+                                  showBorrower={ book.borrowedBy !== username && (book.borrowedBy || book.borrowedBy === "") }
                                   borrowToAnon={ true }
-                                  reading={ this.context.readingBooks.includes(book.id) }
+                                  reading={ this.context.readingBooksIds.includes(book.id) }
                                   borrow={ this.borrow }/>) }
                         </tbody>
                     </table>
@@ -200,12 +210,12 @@ export default class UserLibrary extends React.Component {
                         </thead>
                         <tbody>
                         { this.state.library.borrowedBooks.map((book, index) =>
-                            <Book key={ index } book={ book.book }
+                            <Book key={ index } book={ book.book } owner={ owner }
                                   markReading={ this.readingMarking.bind(this) }
                                   showBorrow={ !showBorrow }
                                   borrow={ this.borrow }
                                   showBorrower={ false }
-                                  reading={ this.context.readingBooks.includes(book.book.id) }/>) }
+                                  reading={ this.context.readingBooksIds.includes(book.book.id) }/>) }
                         </tbody>
                     </table>
                 </section>
