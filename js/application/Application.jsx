@@ -58,7 +58,8 @@ export default class Application extends React.Component {
         username: PropTypes.string,
         readingBooks: PropTypes.array,
         readingBooksIds: PropTypes.array,
-        refreshReadings: PropTypes.func
+        refreshReadings: PropTypes.func,
+        notificationQueue: PropTypes.object
     };
 
     constructor(...props) {

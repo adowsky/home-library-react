@@ -187,7 +187,7 @@ export default class UserLibrary extends React.Component {
                         </thead>
                         <tbody>
                         { this.state.library.ownedBooks.map((book, index) =>
-                            <Book key={ index } book={ book } owner={ owner }
+                            <Book key={ index } book={ book }
                                   markReading={ this.readingMarking.bind(this) }
                                   showBorrow={ showBorrow }
                                   showBorrower={ book.borrowedBy !== username && (book.borrowedBy || book.borrowedBy === "") }
@@ -210,7 +210,7 @@ export default class UserLibrary extends React.Component {
                         </thead>
                         <tbody>
                         { this.state.library.borrowedBooks.map((book, index) =>
-                            <Book key={ index } book={ book.book } owner={ owner }
+                            <Book key={ index } book={ book.book }
                                   markReading={ this.readingMarking.bind(this) }
                                   showBorrow={ !showBorrow }
                                   borrow={ this.borrow }

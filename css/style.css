@@ -63,3 +63,7 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
 
     .stats { margin: 15px auto; font-size: 16px; display:inline-block; border: 1px solid #ccc; border-radius: 5px; padding: 20px;}
     .stats h2 { display: inline-block; font-weight: 700; }
+
+    .comment-form { padding: 10px; }
+        .comment-form textarea { resize: none; box-sizing:border-box; }
+        .comment-form textarea, .comment-form input[type=submit] { width: 100%; }
