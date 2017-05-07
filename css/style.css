@@ -67,3 +67,15 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
     .comment-form { padding: 10px; }
         .comment-form textarea { resize: none; box-sizing:border-box; }
         .comment-form textarea, .comment-form input[type=submit] { width: 100%; }
+
+.book-details { text-align: center; }
+    .book-details h2 { font-weight:700; font-size:20px; font-family:'Georgia', sans-serif;  }
+    .book-details section { padding:20px; }
+        .book-details > section table { width: 100%; margin: 20px auto; }
+            .book-details > section table th { padding: 10px; }
+            .book-details > section table tr { border: 1px solid black; }
+    .book-details > header { padding: 20px; }
+    .book-details > header h2 { font-size:26px; }
+
+.comment { padding: 20px; margin: 5px auto; width: 50%;  border: 1px solid #666; border-radius:5px; }
+.comment > span { display: block; padding: 5px; }

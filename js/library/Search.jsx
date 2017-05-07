@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default class extends React.Component {
+export default class Serach extends React.Component {
     static contextTypes = {
         restClient: PropTypes.object
     };

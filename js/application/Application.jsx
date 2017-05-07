@@ -13,7 +13,7 @@ import Register from "../login/Register";
 import Libraries from "../library/Libraries";
 import UserLibrary from "../library/UserLibrary";
 import RegisteredView from "../static/RegisteredView";
-import Book from "../library/Book";
+import BookDetails from "../library/BookDetails";
 
 const routesForLogged = [
     {
@@ -26,7 +26,7 @@ const routesForLogged = [
     },
     {
         path: "/book/:bookId",
-        component: Book
+        component: BookDetails
     }
 ];
 

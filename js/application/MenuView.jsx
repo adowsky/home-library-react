@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import GrantPermission from "./GrantPermission";
 
-export default class extends React.Component {
+export default class MenuView extends React.Component {
     render() {
         return (
             <div className="header menu">

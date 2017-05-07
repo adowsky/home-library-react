@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { parseQueryParams } from "../UrlUtils";
 
-export default class extends React.Component {
+export default class Confirm extends React.Component {
     static contextTypes = {
         restClient: PropTypes.object
     };
