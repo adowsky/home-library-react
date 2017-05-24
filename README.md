@@ -7,7 +7,7 @@
 ## Installation
 From root directory of the project execute following commands:
 ```
-nmp install
+npm install
 gulp build
 gulp watch
 ```
