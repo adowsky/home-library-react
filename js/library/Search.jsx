@@ -40,18 +40,16 @@ export default class Serach extends React.Component {
         return (
             <section>
                 <form onSubmit={this.find}>
-                    <table>
-                        <tbody>
+
                         <input name="author" placeholder="author" value={ this.state.form.author }
                                onChange={ this.handle }/>
                         <input name="title" placeholder="title" value={ this.state.form.title }
                                onChange={ this.handle }/>
                         <input name="find" type="submit" value="find"/>
-                        </tbody>
-                    </table>
+
                 </form>
-                { this.state.books.map(book => <div className="result"
-                                                    onClick={() => this.props.onSelect(book)}>{ `${book.author} - "${book.title}"`}</div>) }
+                { this.state.books.map((book, idx) => <div className="result" key={ idx }
+                                                    onClick={() => this.props.onSelect(book)}>{ `${book.author} - "${book.title}" source:${book.source}`}</div>) }
             </section>
         );
     }

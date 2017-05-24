@@ -12,7 +12,9 @@ export default class Statistics extends React.Component {
 
         this.state = {
             average: 0,
-            lastBook: null
+            lastBook: null,
+            borrowedBooks: [],
+            booksOutsideLibrary: []
         }
     }
 
@@ -46,6 +48,20 @@ export default class Statistics extends React.Component {
                     <h2>Your speed of reading:</h2>
                     <span>
                         { `${this.state.average} per month` }
+                        </span>
+                </div>
+                <div>
+                    <h2>Borrowed books:</h2>
+                    <span>
+                        { this.state.borrowedBooks.reduce((total, current) => `${total}, ${current.libraryBook.author}-${current.libraryBook.title}`,
+                            "") }
+                        </span>
+                </div>
+                <div>
+                    <h2>Books borrowed form you:</h2>
+                    <span>
+                        { this.state.booksOutsideLibrary.reduce((total, current) => `<0>total</0>   ${current.author}-${current.title},`,
+                            "") }
                         </span>
                 </div>
             </section>

@@ -14,6 +14,9 @@ import Libraries from "../library/Libraries";
 import UserLibrary from "../library/UserLibrary";
 import RegisteredView from "../static/RegisteredView";
 import BookDetails from "../library/BookDetails";
+import MessageViewer from "./MessageViewer";
+
+import uuid from "uuid/v4";
 
 const routesForLogged = [
     {
@@ -59,8 +62,10 @@ export default class Application extends React.Component {
         readingBooks: PropTypes.array,
         readingBooksIds: PropTypes.array,
         refreshReadings: PropTypes.func,
-        notificationQueue: PropTypes.object
+        addMessage: PropTypes.func
     };
+
+
 
     constructor(...props) {
         super(...props);
@@ -68,7 +73,8 @@ export default class Application extends React.Component {
         this.state = {
             username: null,
             readingBooks: [],
-            loaded: false
+            loaded: false,
+            messages: {}
 
         };
 
@@ -77,6 +83,8 @@ export default class Application extends React.Component {
             this.restClient.setToken(null);
             this.flushAuth();
         };
+
+        this.nextId = 0;
 
         this.logIn = this.logIn.bind(this);
         this.logout = this.logout.bind(this);
@@ -109,7 +117,8 @@ export default class Application extends React.Component {
             refreshReadings: this.refreshReadings,
             onLogIn: this.logIn,
             onAuthorizationFail: this.flushAuth,
-            onLogOut: this.logout
+            onLogOut: this.logout,
+            addMessage: this.addMessage
         };
     }
 
@@ -119,12 +128,24 @@ export default class Application extends React.Component {
     }
 
     logout() {
-
-
         this.restClient.deleteRequest(`/api/authorize`, {})
             .then(this.onLogout)
             .catch(this.onLogout)
     }
+
+    addMessage = (message) => {
+        const messages = Object.assign({}, this.state.messages, {
+            [this.nextId++]: message
+        });
+
+        this.setState({messages});
+    };
+
+    messageOutdated = (idx) => {
+        const messages = Object.assign({}, this.state.messages);
+        delete messages[idx];
+        this.setState({messages});
+    };
 
     afterLogin() {
         return this.restClient.getRequest(`/api/readings`)
@@ -166,6 +187,7 @@ export default class Application extends React.Component {
                      :
                     <LoadingView/>
                 }
+            <MessageViewer messages={ this.state.messages } messageOutdated={ this.messageOutdated }/>
             </ApplicationView>
             </Router>
         );

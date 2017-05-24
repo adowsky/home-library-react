@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import BookHeaderView from "./BookHeaderView";
 import Book from "./Book";
+import SearchBookView from  "./SearchBookView";
 import Search from "./Search";
 
 export default class UserLibrary extends React.Component {
@@ -10,7 +11,8 @@ export default class UserLibrary extends React.Component {
         restClient: PropTypes.object,
         refreshReadings: PropTypes.func,
         username: PropTypes.string,
-        readingBooksIds: PropTypes.array
+        readingBooksIds: PropTypes.array,
+        addMessage: PropTypes.func
     };
 
     constructor(...props) {
@@ -67,11 +69,12 @@ export default class UserLibrary extends React.Component {
             title: title
         })
             .then(response => {
-                const books = this.state.books.slice(0);
-                books.unshift(response);
-                this.setState({ books });
+                const { username } = this.props.match.params;
+                this.context.restClient.getRequest(`/api/libraries/${username}`)
+                    .then(library => this.setState({ library }));
             })
-            .then(() => this.setState({ addingBook: null }));
+            .then(() => this.setState({ addingBook: null }))
+            .catch(() => this.context.addMessage(`Cannot add Book ${author} - ${title}. Maybe book is already in library.`));
     }
 
     handle(event) {
@@ -91,6 +94,7 @@ export default class UserLibrary extends React.Component {
                 delete errors[field];
         });
         this.setState({ errors });
+        return Object.keys(errors).length === 0;
     }
 
     rejectAdd(event) {
@@ -109,7 +113,7 @@ export default class UserLibrary extends React.Component {
             .then(() => {
                 let book = this.state.library.ownedBooks.filter(book => book.id === bookId)[0];
                 let libPart = "ownedBooks";
-                if(!book) {
+                if (!book) {
                     book = this.state.library.borrowedBooks.filter(book => book.book.id === bookId)[0];
                     libPart = "borrowedBooks";
                 }
@@ -119,7 +123,7 @@ export default class UserLibrary extends React.Component {
                     this.forceUpdate();
                 } else {
                     book.borrowedBy = null;
-                    if(libPart === "ownedBooks"){
+                    if (libPart === "ownedBooks") {
                         this.forceUpdate();
                     } else {
                         this.state.library[libPart].splice(this.state.library[libPart].indexOf(book), 1);
@@ -147,28 +151,25 @@ export default class UserLibrary extends React.Component {
     onSelectSearchResult(book) {
         const addingBook = Object.assign({}, this.state.addingBook, book);
         this.setState({ addingBook });
+        this.validateBook(addingBook);
     }
 
     render() {
         const owner = this.props.match.params.username;
-        const username = this.context.username ;
+        const username = this.context.username;
         const showBorrow = (username !== owner);
         const errors = Object.keys(this.state.errors).map(key => this.state.errors[key]);
         return (
             <div className="user-library">
                 <BookHeaderView add={ this.onRequestAdd } owner={ this.props.match.params.username }/>
                 <section className="add">
-                    <table>
-                        <tbody>
-                        { (this.state.addingBook) ?
-                            <Book book={ this.state.addingBook } add={ this.onAdd } handle={ this.handle }
-                                  reject={ this.rejectAdd }/>
-                            : null }
-                        </tbody>
-                    </table>
+                    { (this.state.addingBook) ?
+                        <SearchBookView book={ this.state.addingBook } add={ this.onAdd } handle={ this.handle }
+                                        reject={ this.rejectAdd }/>
+                        : null }
                     { (errors.length > 0) ?
                         <div className="errors">
-                            { errors.map(error => <p>{error}</p>) }
+                            { errors.map(error => <p key={ error }>{error}</p>) }
                         </div>
                         : null }
                 </section>

@@ -40,6 +40,15 @@ export default class Book extends React.Component {
 
     onAddComment(event) {
         event.preventDefault();
+        if(this.state.comment.trim() === "") {
+            this.setState({
+                commenting: false,
+                comment: ""
+            });
+            return;
+        }
+
+
         this.context.restClient.postRequestNoBody(`/api/books/${this.props.book.id}/comments`, { content: this.state.comment })
             .then(() => {
                 this.setState({

@@ -32,6 +32,11 @@ export default class BookDetails extends React.Component {
                     <header>
                         <h2>Comments</h2>
                     </header>
+                    {(this.state.comments.length === 0) ?
+                        <div className="comment">
+                            <span>This book don't have any comment.</span>
+                        </div> : null
+                    }
                     { this.state.comments.map((comment, key) =>
                         <div className="comment" key={ key } >
                             <span>{ comment.comment }</span>

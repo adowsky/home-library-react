@@ -12,7 +12,7 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
 .emphasised { font-size:20px; font-family:'Georgia', sans-serif; }
 .title { font-size:16px; font-family:'Georgia', sans-serif; }
 .v-spaced { margin: 10px auto; }
-.v-padded { padding: 10px auto; }
+.v-padded { padding: 10px; }
 .header { background: #3b2b97; }
 
 .display-table > thead { font-weight:700; color: #fff; background: #4383af; }
@@ -28,11 +28,11 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
             nav a:hover { color: #ccc; }
 
     .login {}
-    .login > div { text-align:center; padding: 20px; }
-            .login > div > input { display: block; margin: 3px auto; padding: 5px; border-radius:3px; border: 1px solid #CBCBCB; }
-            .login > div > h2 { margin: 6px auto; }
-            .login > div > button { border-radius: 4px; padding: 4px 6px; background: #5570a4;border: 1px solid #383c98; color:#fff; }
-            .login > div > button:hover { background: #383c98; }
+    .login > div, .register-form { text-align:center; padding: 20px; }
+            .login > div > input, .register-form > input { display: block; margin: 3px auto; padding: 5px; border-radius:3px; border: 1px solid #CBCBCB; }
+            .login > div > h2, .register-form > h2 { margin: 6px auto; }
+            .login > div > button, .register-form > button{ border-radius: 4px; padding: 4px 6px; background: #5570a4;border: 1px solid #383c98; color:#fff; }
+            .login > div > button:hover, .register-form > button:hover { background: #383c98; }
 
     .libraries, .user-library { text-align: center; }
     .button-link { padding: 10px; border: 1px solid #b0b0b0; border-radius: 6px; display: block; max-width: 60%; margin: 5px auto; color:#000; text-decoration:none; transition: all 0.2s ease-out; }
@@ -45,8 +45,8 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
         .user-library table li { display:block; margin: 0 auto; padding: 5px; }
 
     .user-library > .add {  }
-    .user-library > .add th { padding:0 5px; }
-    .user-library > .add tr { border: none;  }
+    .user-library > .add div { padding:0 5px; }
+    .user-library > .add div > span { display: inline-block; vertical-align: middle; }
 
 
     .permission { padding: 5px; }
@@ -62,7 +62,8 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
     .registered > p { font-family:'Georgia', sans-serif; }
 
     .stats { margin: 15px auto; font-size: 16px; display:inline-block; border: 1px solid #ccc; border-radius: 5px; padding: 20px;}
-    .stats h2 { display: inline-block; font-weight: 700; }
+        .stats > div { padding: 5px; }
+            .stats h2 { display: inline-block; font-weight: 700; }
 
     .comment-form { padding: 10px; }
         .comment-form textarea { resize: none; box-sizing:border-box; }
@@ -79,3 +80,10 @@ input { padding: 5px; border-radius:3px; border: 1px solid #CBCBCB }
 
 .comment { padding: 20px; margin: 5px auto; width: 50%;  border: 1px solid #666; border-radius:5px; }
 .comment > span { display: block; padding: 5px; }
+
+.result {  padding: 5px; cursor: pointer; }
+.result:hover {  text-decoration:underline; }
+
+.message-viewer {  max-height: 150px; transition: all 0.3s ease-out; width: 300px; overflow: hidden; overflow-y:scroll; text-align: center; position: fixed; bottom: 0; background: #d4d4d4; padding: 20px;  border-radius: 7px 7px 0 0; color: #cd1e1e; }
+.message-viewer.minimized { max-height:0; padding: 0; }
+    .message-viewer > span { display: block; }

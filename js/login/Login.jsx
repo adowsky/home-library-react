@@ -11,7 +11,8 @@ export default class Login extends React.Component {
     static contextTypes = {
         restClient: PropTypes.object,
         onLogIn: PropTypes.func,
-        loggedIn: PropTypes.bool
+        loggedIn: PropTypes.bool,
+        addMessage: PropTypes.func
     };
 
     constructor(...props) {
@@ -55,7 +56,10 @@ export default class Login extends React.Component {
                 this.context.restClient.setToken(authorization.accessToken);
                 return login;
             })
-            .then(this.context.onLogIn);
+            .then(this.context.onLogIn)
+            .catch(() => {
+                this.context.addMessage("Log in failed. Check your credentials and try again");
+            });
     }
 
     render() {
